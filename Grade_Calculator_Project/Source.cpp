@@ -27,7 +27,6 @@ void displayFile(string fname, string lname, string course, string sub1, string 
 int main(){
     //Variables used
     int selection;
-    int n = 10;
     string first_name, last_name;
     string course_name;
     string subject_1, subject_2, subject_3;
