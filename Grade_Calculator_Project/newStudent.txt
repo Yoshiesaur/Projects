@@ -1,6 +1,7 @@
-Gorge Foreman
-Anatomy
-ExamsQuizzesHomeworks
-50 0 50 0 50 
-10 0 10 0 10 
-40 0 40 0 40 
+John Brown
+Philosophy
+Exams Quizzes Homeworks
+30 30 40
+10 20 30 40 50 
+10 30 40 50 70 
+0 0 0 0 0 

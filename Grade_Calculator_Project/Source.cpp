@@ -30,15 +30,16 @@ int main(){
     string first_name, last_name;
     string course_name;
     string subject_1, subject_2, subject_3;
+    int weight_1, weight_2, weight_3;
     int grade_1[SIZE], grade_2[SIZE], grade_3[SIZE];
 
 
     ifstream inFile;
     ofstream outFile;
     //After this runs, variables should be populated. 
-    extractFile(first_name, last_name, course_name, subject_1, subject_2, subject_3, grade_1, grade_2, grade_3, inFile);
+    extractFile(first_name, last_name, course_name, subject_1, subject_2, subject_3, weight_1, weight_2, weight_3, grade_1, grade_2, grade_3, inFile);
     //Displaying variables extracted
-    displayFile_inFile(first_name, last_name, course_name, subject_1, subject_2, subject_3, grade_1, grade_2, grade_3, inFile);
+    displayFile_inFile(first_name, last_name, course_name, subject_1, subject_2, subject_3, weight_1, weight_2, weight_3, grade_1, grade_2, grade_3, inFile);
     
     cout << endl;
 
@@ -62,6 +63,9 @@ int main(){
         
         cout << "Enter category names: " << endl;
         cin >> subject_1 >> subject_2 >> subject_3;
+        
+        cout << "Enter the weights for each category " << endl;
+        cin >> weight_1 >> weight_2 >> weight_3;
 
         cout << "Enter 5 grades for " << subject_1 << " (one at a time)." << endl;
         for (int i = 0; i < SIZE; i++){
@@ -76,9 +80,15 @@ int main(){
             cin >> grade_3[i];
         }
         //Copying code to file
+        cout << endl;
+
+        cout << "Saving Data to File" << endl;
+
         outFile << first_name << " " << last_name << endl;
         outFile << course_name << endl;
         outFile << subject_1 << " " << subject_2 << " " << subject_3 << endl;
+        outFile << weight_1 << " " << weight_2 << " " << weight_3 << endl;
+
         for(int i = 0; i < SIZE; i++){
             outFile << grade_1[i] << " ";
         }
@@ -93,10 +103,10 @@ int main(){
         outFile << endl;
     }
     outFile.close();
-    outFile.is_open() ? cout << "Couldn't properly close file" << endl : cout << "Closed file propelry" << endl;
+    outFile.is_open() ? cout << "Couldn't properly save file" << endl : cout << "File saved properly" << endl;
     cout << endl;
 
-    displayFile_outFile(first_name, last_name, course_name, subject_1, subject_2, subject_3, grade_1, grade_2, grade_3, outFile);
+    displayFile_outFile(first_name, last_name, course_name, subject_1, subject_2, subject_3, weight_1, weight_2, weight_3, grade_1, grade_2, grade_3, outFile);
 
     return 0;
 }
