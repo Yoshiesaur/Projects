@@ -56,25 +56,41 @@ int main(){
         cout << endl;
         cout << "Enter your first and last name: ";
         cin >> first_name >> last_name;
-
+        
         cout << "Enter course name: ";
         cin >> course_name;
         
         cout << "Enter category names: " << endl;
         cin >> subject_1 >> subject_2 >> subject_3;
 
-        cout << "Enter 5 grades for " << subject_1 << " (one at a time).";
+        cout << "Enter 5 grades for " << subject_1 << " (one at a time)." << endl;
         for (int i = 0; i < SIZE; i++){
             cin >> grade_1[i];
         }
-        cout << "Enter 5 grades for " << subject_2 << " (one at a time).";
+        cout << "Enter 5 grades for " << subject_2 << " (one at a time)." << endl;
         for (int i = 0; i < SIZE; i++){
-            cin >> grade_2[i];
+            cin >> grade_2[i] ;
         }
-        cout << "Enter 5 grades for " << subject_3 << " (one at a time).";
+        cout << "Enter 5 grades for " << subject_3 << " (one at a time)." << endl;
         for (int i = 0; i < SIZE; i++){
             cin >> grade_3[i];
         }
+        //Copying code to file
+        outFile << first_name << last_name << endl;
+        outFile << course_name << endl;
+        outFile << subject_1 << subject_2 << subject_3 << endl;
+        for(int i = 0; i < SIZE; i++){
+            outFile << grade_1[i] << " ";
+        }
+        outFile << endl;
+        for(int i = 0; i < SIZE; i++){
+            outFile << grade_2[i] << " ";
+        }
+        outFile << endl;
+        for(int i = 0; i < SIZE; i++){
+            outFile << grade_3[i] << " ";
+        }
+        outFile << endl;
     }
     outFile.close();
     outFile.is_open() ? cout << "Couldn't properly close file" << endl : cout << "Closed file propelry" << endl;
