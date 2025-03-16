@@ -78,7 +78,7 @@ int main(){
         //Copying code to file
         outFile << first_name << " " << last_name << endl;
         outFile << course_name << endl;
-        outFile << subject_1 << subject_2 << subject_3 << endl;
+        outFile << subject_1 << " " << subject_2 << " " << subject_3 << endl;
         for(int i = 0; i < SIZE; i++){
             outFile << grade_1[i] << " ";
         }
