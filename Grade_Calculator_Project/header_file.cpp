@@ -14,8 +14,11 @@ private:
 string first_name;
 string last_name;
 string course_names[SIZE];
-int num_grades;
 public:
+
+};
+
+class School {
 
 };
 
