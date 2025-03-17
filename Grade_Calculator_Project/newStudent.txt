@@ -1,7 +1,7 @@
-John Brown
+Zarek Moreno
 Philosophy
 Exams Quizzes Homeworks
-30 30 40
-10 20 30 40 50 
-10 30 40 50 70 
-0 0 0 0 0 
+50 20 30
+50 50 30 20 10 
+50 50 50 50 50 
+10 10 10 10 10 

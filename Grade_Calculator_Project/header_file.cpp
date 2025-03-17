@@ -9,6 +9,16 @@ using namespace std;
 
 const int SIZE = 5;
 
+class Student {
+private:
+string first_name;
+string last_name;
+string course_names[SIZE];
+int num_grades;
+public:
+
+};
+
 void extractFile(string &fname, string &lname, string &subject, string &sub1, string &sub2, string &sub3, int &weight1, int &weight2, int &weight3, int grade1[], int grade2[], int grade3[], ifstream &file)
 {
 
@@ -86,7 +96,7 @@ void displayFile_inFile(string fname, string lname, string subject, string sub1,
     cout << endl;
 
     cout << "Displaying weights for each subject" << endl;
-    cout << grade1 << " " << grade2 << " " << grade3 << endl;
+    cout << dec << grade1 << " " << grade2 << " " << grade3 << endl;
     
     cout << endl;
 

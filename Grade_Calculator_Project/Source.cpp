@@ -61,21 +61,21 @@ int main(){
         cout << "Enter course name: ";
         cin >> course_name;
         
-        cout << "Enter category names: " << endl;
+        cout << "Enter category names: ";
         cin >> subject_1 >> subject_2 >> subject_3;
         
-        cout << "Enter the weights for each category " << endl;
+        cout << "Enter the weights for each category: ";
         cin >> weight_1 >> weight_2 >> weight_3;
 
-        cout << "Enter 5 grades for " << subject_1 << " (one at a time)." << endl;
+        cout << "Enter 5 grades for " << subject_1 << ": ";
         for (int i = 0; i < SIZE; i++){
             cin >> grade_1[i];
         }
-        cout << "Enter 5 grades for " << subject_2 << " (one at a time)." << endl;
+        cout << "Enter 5 grades for " << subject_2 << ": ";
         for (int i = 0; i < SIZE; i++){
             cin >> grade_2[i] ;
         }
-        cout << "Enter 5 grades for " << subject_3 << " (one at a time)." << endl;
+        cout << "Enter 5 grades for " << subject_3 << ": ";
         for (int i = 0; i < SIZE; i++){
             cin >> grade_3[i];
         }
