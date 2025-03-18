@@ -4,79 +4,102 @@
 #include <cmath>
 #include <fstream>
 #include <string>
-#include <array>
+#include <vector>
 
 using namespace std;
-
-const int SIZE = 5;
 
 class Course {
 
 private:
+    //Single Variables
     string first_name;
     string last_name;
     string course_name;
-    vector<int> grades;
-    double weight;
     double sum;
+
+    //Vectors
+    vector<string> course_subjects;
+    vector<int> grades;
+    vector<double> weights;
+
+    //Files
     ofstream file;
-public:
-    Course(string fname, string lname, string inCname){
-        first_name = fname;
-        last_name = lname;
-        course_name = inCname;
-        cout << "Created new Student " << first_name << " " << last_name << endl;
-    }
-    void addWeight(double inWeight){
-        weight = inWeight;
-    }
 
-    void pushGrade(int grade){
-        grades.push_back(grade);
-    }
-
-    double CalcGrade() const{
-        if (grades.empty()){
-            cout << "Grade Stack is empty"  << endl;
-            return 0;
+    //Strictly Forbidden
+    void openFile(string file_name){
+        if (file_name.find(".txt") == string::npos) {
+        file_name.append(".txt");
         }
-
-        double sum = 0;
-
-        for(int i = 0; i < grades.size(); i++){
-            sum += grades[i];
-        }
-        return sum*(weight /100.f);
-    }
-
-    void display() const{
-        cout << "Student: " << first_name << " " << last_name;
-        cout << "Grades: ";
-        for(int i = 0; i < grades.size(); i++){
-            cout << grades[i] << " ";
-        }
-        cout << "\nWeight: " << weight << "%" << endl;
-    }
-
-    void saveToFile(){
-        string file_name;
-        if (file_name.find(".txt.")){
-            file.open(file_name);
-            if(file.is_open()){
-                cout << "File '" << file_name <<"' succesfully opened" << endl;
-                cout << endl;
-                cout << "Saving data to file: " << endl;
-                file << first_name << " " << last_name << endl;
-                file << course_name << endl;
-                
-            }
-            else{
-                cout << "File could not be properly opened" << endl;
-            }
+        
+        file.open(file_name);
+        if(!file.is_open()){
+            cout << "File not opened" << endl;
+            return;
         }
         else{
-            file.open(file_name.append(".txt"));
-            !file.is_open() ? cout << "Could not open file '" << file_name <<".txt'" << endl : cout << "Properly opened file" << endl;
+            cout << "File opened successfully" << endl;
         }
+    }
+
+    void closeFile(){
+        file.close();
+        file.is_open() ? cout << "File not closed properly" << endl : cout << "File closed properly" << endl;
+    }
+
+public:
+    Course(string fname, string lname, string inCourseName){
+        first_name = fname;
+        last_name = lname;
+        course_name = inCourseName;
+        cout << "Created new Student " << first_name << " " << last_name << endl;
+    }
+
+    void delete_weight_at(int target_index){
+        if(target_index < 0 || target_index >= weights.size()){
+            cout << "Invalid Weight Index" << endl;
+        }
+        else{ 
+            cout << "Removing weight: " << weights[target_index] << " at index '" << target_index << "'" << endl;
+            weights.erase(weights.begin() + target_index);
+        }
+    }
+
+    void delete_grade_at(int target_index){
+        if (target_index < 0 || target_index >= grades.size()){
+            cout << "Invalid Index" << endl;
+        }
+        else{
+            cout << "Erasing " << grades[target_index] << " at index '" << target_index << "'" << endl;
+            grades.erase(grades.begin() + target_index);
+        }
+    }
+
+    void deleteAll(){
+        grades.clear();
+        weights.clear();
+        course_subjects.clear();
+        cout << "All data has been deleted " << endl;
+    }
+
+    void saveToFile(string file_name){
+        openFile(file_name);
+        if(file.is_open()){
+            cout << "Saving data to file" << endl;
+            file << first_name << " " << last_name << endl;
+            file << course_name << endl;
+            
+            for(int i : weights){
+                file << i << " ";
+                for(int j : grades){
+                    file << j << " ";
+                }
+                file << endl;
+            }
+            closeFile();
+        }
+        else{
+            return;
+        }
+        
     }
 };
