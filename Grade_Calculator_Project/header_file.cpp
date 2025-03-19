@@ -5,62 +5,99 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <array>
 
 using namespace std;
 
-class Course {
+class Course{
+    /*
+    1: Create new SubClass
+    2: Delete SubClass
+    3: Display Info
+    4: Calculate Final Grade*/
+private:
+
+    int limit = 5; //Hard coded for data limitations
+    string course_name;
+    vector<SubClass> subclasses; 
+
+public:
+    //Constructor
+    Course(string inName){
+        course_name = inName;
+    }
+
+    void insert_subcourse(SubClass inName){
+        subclasses.push_back(inName);
+    }
+
+    void delete_subclass(int index){
+        cout << "Erasing " << subclasses[index].getName() << " at index '" << index << "'" << endl;
+        subclasses.erase(subclasses.begin() + index);
+    }
+
+    void display() const{
+        if(subclasses.empty()){
+            cout << "Course is empty" << endl;
+        }
+        else{ 
+            cout << "Course Name: " << course_name << endl;
+            for(SubClass i : subclasses){
+                cout << "Subclass name: " << i.getName() << endl;
+                i.display_subclass();
+            } 
+        }
+        
+    }
+
+};
+
+class SubClass {
+    /*This class should be able to 
+    1: Insert grades
+    2: Delete grades
+    3: Delete a certain grade
+    4: Display all info
+    5: Calculate Weighed Average
+    6: Implement getname(), getweightedtotal(), getweight();
+    */
 
 private:
     //Single Variables
-    string first_name;
-    string last_name;
-    string course_name;
-    double sum;
-
-    //Vectors
-    vector<string> course_subjects;
-    vector<int> grades;
-    vector<double> weights;
-
-    //Files
-    ofstream file;
-
-    //Strictly Forbidden
-    void openFile(string file_name){
-        if (file_name.find(".txt") == string::npos) {
-        file_name.append(".txt");
-        }
-        
-        file.open(file_name);
-        if(!file.is_open()){
-            cout << "File not opened" << endl;
-            return;
-        }
-        else{
-            cout << "File opened successfully" << endl;
-        }
-    }
-
-    void closeFile(){
-        file.close();
-        file.is_open() ? cout << "File not closed properly" << endl : cout << "File closed properly" << endl;
-    }
+    string subclass_name;
+    vector<double> grades;
+    double weighted_total;
+    double subclass_weight;
 
 public:
-    Course(string fname, string lname, string inCourseName){
-        first_name = fname;
-        last_name = lname;
-        course_name = inCourseName;
-        cout << "Created new Student " << first_name << " " << last_name << endl;
+
+    SubClass(string inName, double inWeight){
+        subclass_name = inName;
+        subclass_weight = inWeight;
     }
 
-    void delete_weight_at(int target_index){
-        if(target_index < 0 || target_index >= weights.size()){
-            cout << "Invalid Weight Index" << endl;
+    double getWeight(){
+        return subclass_weight;
+    }
+
+    double getWeightedTotal(){
+        return weighted_total;
+    }
+
+    string getName(){
+        return subclass_name;
+    }
+
+    void calculate_average(){
+        if(grades.empty()){
+            weighted_total = 0;
         }
-        else{ 
-            cout << "Removing weight: " << weights[target_index] << " at index '" << target_index << "'" << endl;
-            weights.erase(weights.begin() + target_index);
+        else{
+            double sum = 0;
+            for(double j: grades){
+                sum += j;
+            }
+            weighted_total = sum*(subclass_weight/100.f);
         }
     }
 
@@ -72,34 +109,32 @@ public:
             cout << "Erasing " << grades[target_index] << " at index '" << target_index << "'" << endl;
             grades.erase(grades.begin() + target_index);
         }
+        calculate_average();
+    }
+
+    void display_subclass() const{
+        cout << "Subclass Name: " << subclass_name << endl;
+        cout << "Weight: " << subclass_weight << endl;
+        cout << "Grades: ";
+        int j = 1;
+        for(double i : grades){
+            cout << setw(15) << j << ": " << i << endl;
+            j++;
+        }
+        cout << "Weighted Average: " << weighted_total << endl;
+    }
+
+    void insert_grade(double inNumber){
+        grades.push_back(inNumber);
+        calculate_average();
     }
 
     void deleteAll(){
         grades.clear();
-        weights.clear();
-        course_subjects.clear();
-        cout << "All data has been deleted " << endl;
-    }
-
-    void saveToFile(string file_name){
-        openFile(file_name);
-        if(file.is_open()){
-            cout << "Saving data to file" << endl;
-            file << first_name << " " << last_name << endl;
-            file << course_name << endl;
-            
-            for(int i : weights){
-                file << i << " ";
-                for(int j : grades){
-                    file << j << " ";
-                }
-                file << endl;
-            }
-            closeFile();
-        }
-        else{
-            return;
-        }
-        
-    }
+        subclass_name.clear();
+        subclass_weight = 0;
+        weighted_total = 0;
+        calculate_average();
+        cout << "All data has been cleared " << endl;
+    }   
 };
