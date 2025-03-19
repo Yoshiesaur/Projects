@@ -20,6 +20,7 @@ private:
     int limit = 5; //Hard coded for data limitations
     string course_name;
     vector<SubClass> subclasses; 
+    double final_grade;
 
 public:
     //Constructor
@@ -27,13 +28,35 @@ public:
         course_name = inName;
     }
 
+    double get_course_grade(){
+        return final_grade;
+    }
+
+    string get_course_name(){
+        return course_name;
+    }
+
     void insert_subcourse(SubClass inName){
+        if(subclasses.size() >= limit){
+            cout << "Number of SubCourses reached" << endl;
+        }
+        else{
         subclasses.push_back(inName);
+        calculate_final_grade();            
+        }
+
     }
 
     void delete_subclass(int index){
+        if(index < 0 || index >= subclasses.size()){
+            cout << "Invalid Index" << endl;
+        }
+        else{ 
         cout << "Erasing " << subclasses[index].getName() << " at index '" << index << "'" << endl;
         subclasses.erase(subclasses.begin() + index);
+        calculate_final_grade();
+        }
+
     }
 
     void display() const{
@@ -47,7 +70,21 @@ public:
                 i.display_subclass();
             } 
         }
+    }
+
+    void calculate_final_grade(){
+        if(subclasses.empty()){
+            cout << "Subclasses are empty" << endl;
+            final_grade = 0;
+        }
         
+        else{
+            double sum = 0;
+            for(SubClass i : subclasses){
+                sum += i.getWeightedTotal();
+            }
+            final_grade = sum;
+        }
     }
 
 };
