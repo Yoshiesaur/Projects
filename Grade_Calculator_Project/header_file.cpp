@@ -9,6 +9,70 @@
 
 using namespace std;
 
+class Semester{
+    /*
+    1: Create new Semester
+    2: create a new course
+    3: Delete a course
+    4: Calculate grades of each course
+    5: Display final grade of each course
+    6: Calculate Semester GPA
+    7: Clear all Courses
+    */
+private:
+    const int SIZE_LIMIT = 6;
+    const int HOUR_LIMIT = 18;
+    string semester_name;
+    vector<Course> courses;
+    vector<int> course_hours;
+    int total_hours;
+    double semester_GPA;
+
+public:
+    //Create a new semester
+    Semester(string inName){
+        semester_name = inName;
+    }
+
+    //2: Create a new course
+    void add_course(string inName, int inHours){
+        if ((courses.size() > SIZE_LIMIT) || (total_hours > 18)){
+            cout << "Exceeding size limit or hour limit" << endl;
+            return;
+        }
+        else{
+            courses.push_back(inName);
+            course_hours.push_back(inHours);
+            update_course_hours(inHours);
+        }
+    }
+
+    //3: Delete a course 
+    void delete_course(int index){
+        if(course_hours.empty()){
+            cout << "Courses is empty" << endl;
+        }
+        else{ 
+            cout << "Erasing " << courses[index].get_course_name() << " at index '" << index << "'" << endl;
+            update_course_hours((-1)*course_hours[index]);
+            courses.erase(courses.begin() + index);
+            course_hours.erase(course_hours.begin() + index);
+        }
+    }
+
+    //4 Calculate Grade of Each Course
+
+    void update_course_hours(int inHours){
+        if(courses.empty()){
+            total_hours = 0;
+        }
+        else{
+            total_hours += inHours;
+        }
+    }
+
+};
+
 class Course{
     /*
     1: Create new SubClass
@@ -17,7 +81,7 @@ class Course{
     4: Calculate Final Grade*/
 private:
 
-    int limit = 5; //Hard coded for data limitations
+    const int SIZE_LIMIT = 5; //Hard coded for data limitations
     string course_name;
     vector<SubClass> subclasses; 
     double final_grade;
@@ -41,7 +105,7 @@ public:
     }
 
     void insert_subcourse(SubClass inName){
-        if(subclasses.size() >= limit){
+        if(subclasses.size() >= SIZE_LIMIT){
             cout << "Number of SubCourses reached" << endl;
         }
         else{
@@ -74,12 +138,12 @@ public:
             cout << "Final Grade: " << fixed << setprecision(2) << final_grade << endl;
             cout << "============================" << endl;
 
-            for (const auto& i : subclasses) {
+            for (size_t i = 0; i < subclasses.size(); i++) {
             cout << "\n----- SubClass -----" << endl;
-            cout << "Name: " << i.get_subclass_name() << "\n";
-            i.display_subclass();
+            cout << "Name: " << subclasses[i].get_subclass_name() << "\n";
+            subclasses[i].display_subclass();
             }
-            
+
             cout << "============================\n" << endl;
         }
     }
@@ -88,14 +152,13 @@ public:
 
     void calculate_final_grade(){
         if(subclasses.empty()){
-            cout << "Subclasses are empty" << endl;
             final_grade = 0;
         }
         
         else{
             double sum = 0;
-            for(SubClass i : subclasses){
-                sum += i.get_subclass_weighted_average();
+            for(size_t i = 0; i < subclasses.size(); i++){
+                sum += subclasses[i].get_subclass_weighted_average();
             }
             final_grade = sum;
         }
@@ -124,7 +187,7 @@ public:
 
     SubClass(string inName, double inWeight){
         subclass_name = inName;
-        subclass_weight = inWeight;
+        (inWeight > 0) ? subclass_weight = inWeight : subclass_weight = 1;
     }
 
     void rename_subclass(string new_name){
@@ -180,8 +243,14 @@ public:
     }
 
     void insert_grade(double inNumber){
-        grades.push_back(inNumber);
-        calculate_subclass_average();
+        if(inNumber < 0 || inNumber > 100){
+            cout << "Invalid grade. Must be between 0 and 100" << endl;
+        }
+        else{ 
+            grades.push_back(inNumber);
+            calculate_subclass_average();            
+        }
+
     }
 
     void clear_subclass(){
