@@ -32,11 +32,11 @@ public:
         course_name = new_name;
     }
 
-    double get_course_grade(){
+    double get_course_grade() const{
         return final_grade;
     }
 
-    string get_course_name(){
+    string get_course_name() const{
         return course_name;
     }
 
@@ -57,7 +57,7 @@ public:
             return;
         }
         else{ 
-        cout << "Erasing " << subclasses[index].getName() << " at index '" << index << "'" << endl;
+        cout << "Erasing " << subclasses[index].get_subclass_name() << " at index '" << index << "'" << endl;
         subclasses.erase(subclasses.begin() + index);
         calculate_final_grade();
         }
@@ -69,15 +69,22 @@ public:
             cout << "Course is empty" << endl;
         }
         else{ 
+            cout << "\n============================" << endl;
             cout << "Course Name: " << course_name << endl;
-            cout << "Final Grade: " << final_grade << endl;
-            for(SubClass i : subclasses){
-                cout << "\n-----SubClass-----\n" << endl;
-                cout << "Name: " << i.getName() << "\n";
-                i.display_subclass();
-            } 
+            cout << "Final Grade: " << fixed << setprecision(2) << final_grade << endl;
+            cout << "============================" << endl;
+
+            for (const auto& i : subclasses) {
+            cout << "\n----- SubClass -----" << endl;
+            cout << "Name: " << i.get_subclass_name() << "\n";
+            i.display_subclass();
+            }
+            
+            cout << "============================\n" << endl;
         }
     }
+        
+
 
     void calculate_final_grade(){
         if(subclasses.empty()){
@@ -124,15 +131,15 @@ public:
         subclass_name = new_name;
     }   
 
-    double get_subclass_weight(){
+    double get_subclass_weight () const{
         return subclass_weight;
     }
 
-    double get_subclass_weighted_average(){
+    double get_subclass_weighted_average() const{
         return weighted_total;
     }
 
-    string get_subclass_name(){
+    string get_subclass_name () const {
         return subclass_name;
     }
 
@@ -177,7 +184,7 @@ public:
         calculate_subclass_average();
     }
 
-    void delete_subclass(){
+    void clear_subclass(){
         grades.clear();
         subclass_weight = 0;
         weighted_total = 0;
