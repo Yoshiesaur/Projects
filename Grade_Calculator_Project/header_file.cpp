@@ -27,6 +27,10 @@ public:
     Course(string inName){
         course_name = inName;
     }
+    
+    void rename_course(string new_name){
+        course_name = new_name;
+    }
 
     double get_course_grade(){
         return final_grade;
@@ -50,6 +54,7 @@ public:
     void delete_subclass(int index){
         if(index < 0 || index >= subclasses.size()){
             cout << "Invalid Index" << endl;
+            return;
         }
         else{ 
         cout << "Erasing " << subclasses[index].getName() << " at index '" << index << "'" << endl;
@@ -59,14 +64,16 @@ public:
 
     }
 
-    void display() const{
+    void display_course() const{
         if(subclasses.empty()){
             cout << "Course is empty" << endl;
         }
         else{ 
             cout << "Course Name: " << course_name << endl;
+            cout << "Final Grade: " << final_grade << endl;
             for(SubClass i : subclasses){
-                cout << "Subclass name: " << i.getName() << endl;
+                cout << "\n-----SubClass-----\n" << endl;
+                cout << "Name: " << i.getName() << "\n";
                 i.display_subclass();
             } 
         }
@@ -81,7 +88,7 @@ public:
         else{
             double sum = 0;
             for(SubClass i : subclasses){
-                sum += i.getWeightedTotal();
+                sum += i.get_subclass_weighted_average();
             }
             final_grade = sum;
         }
@@ -113,19 +120,23 @@ public:
         subclass_weight = inWeight;
     }
 
-    double getWeight(){
+    void rename_subclass(string new_name){
+        subclass_name = new_name;
+    }   
+
+    double get_subclass_weight(){
         return subclass_weight;
     }
 
-    double getWeightedTotal(){
+    double get_subclass_weighted_average(){
         return weighted_total;
     }
 
-    string getName(){
+    string get_subclass_name(){
         return subclass_name;
     }
 
-    void calculate_average(){
+    void calculate_subclass_average(){
         if(grades.empty()){
             weighted_total = 0;
         }
@@ -146,7 +157,7 @@ public:
             cout << "Erasing " << grades[target_index] << " at index '" << target_index << "'" << endl;
             grades.erase(grades.begin() + target_index);
         }
-        calculate_average();
+        calculate_subclass_average();
     }
 
     void display_subclass() const{
@@ -155,7 +166,7 @@ public:
         cout << "Grades: ";
         int j = 1;
         for(double i : grades){
-            cout << setw(15) << j << ": " << i << endl;
+            cout << setw(5) << j << ": " << i << endl;
             j++;
         }
         cout << "Weighted Average: " << weighted_total << endl;
@@ -163,15 +174,14 @@ public:
 
     void insert_grade(double inNumber){
         grades.push_back(inNumber);
-        calculate_average();
+        calculate_subclass_average();
     }
 
-    void deleteAll(){
+    void delete_subclass(){
         grades.clear();
-        subclass_name.clear();
         subclass_weight = 0;
         weighted_total = 0;
-        calculate_average();
+        calculate_subclass_average();
         cout << "All data has been cleared " << endl;
     }   
 };
