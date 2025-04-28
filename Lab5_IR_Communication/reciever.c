@@ -13,3 +13,10 @@
 #pragma config LVP    = OFF       // Low-Voltage Programming disabled
 #pragma config CPD    = OFF       // Data EEPROM Code Protection disabled
 #pragma config CP     = OFF       // Flash Program Memory Code Protection disabled
+
+//Function Protypes
+
+
+int main(void){
+
+}
