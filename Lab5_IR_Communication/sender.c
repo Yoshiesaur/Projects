@@ -1,14 +1,15 @@
-// File: tx_ir.c
-// Target: PIC16F676 @ 4 MHz internal oscillator
-// Infrared 4-bit transmitter (no PWM)
-
 #include <xc.h>
 #include <stdint.h>
 
 #define _XTAL_FREQ 4000000UL
+#define EMITTER    LATCbits.LATC0
 
-// CONFIGURATION BITS
-#pragma config FOSC   = INTRCIO   // Internal OSC, RA4/OSC2 & RA5/OSC1 as I/O
+// Function Prototypes
+uint8_t readData(void);
+void sendBits(uint8_t);
+
+// PIC Configuration
+#pragma config FOSC   = INTRCIO   // 4 MHz internal OSC, RA4/OSC2 & RA5/OSC1 as I/O
 #pragma config WDTE   = OFF       // Watchdog Timer disabled
 #pragma config PWRTE  = OFF       // Power-up Timer disabled
 #pragma config MCLRE  = OFF       // RA3/MCLR pin enabled as digital input
@@ -17,64 +18,61 @@
 #pragma config CPD    = OFF       // Data EEPROM Code Protection disabled
 #pragma config CP     = OFF       // Flash Program Memory Code Protection disabled
 
-// I/O definitions
-#define TX_PORT     PORTA
-#define TX_TRIS     TRISA
-#define TX_MASK     0x0F        // RA0..RA3 inputs
-#define IR_TX_LAT   LATAbits.LATA5
-#define IR_TX_TRIS  TRISAbits.TRISA5
+// Initialize PORTA pins 0–3 as digital inputs, RC0 as output
+void _init_control_(void) {
+    ANSEL   = 0x00;       // disable analog on RA0–RA2
+    CMCON   = 0x07;       // disable comparators
+    VRCON   = 0x00;       // disable voltage reference
 
-// Timing (µs)
-#define START_PULSE_US 1000
-#define START_GAP_US    500
-#define BIT0_PULSE_US   250
-#define BIT1_PULSE_US   500
-#define BIT_GAP_US      500
-
-// prototypes
-void init_ports(void);
-void send_frame(uint8_t data);
+    // RA0–RA3 as inputs
+    TRISAbits.TRISA0 = 1;
+    TRISAbits.TRISA1 = 1;
+    TRISAbits.TRISA2 = 1;
+    TRISAbits.TRISA3 = 1;
+    
+    // RC0 as output for IR pulse
+    TRISCbits.TRISC0 = 0;
+    EMITTER = 0;
+}
 
 void main(void) {
-    init_ports();
+    _init_control_();
 
+    uint8_t read_data;
     while (1) {
-        uint8_t data = TX_PORT & TX_MASK;
-        send_frame(data);
-        __delay_ms(50);        // small pause between frames
+        read_data = readData();
+        sendBits(read_data);
+        __delay_ms(50);    // 50 ms gap between frames
     }
 }
 
-void init_ports(void) {
-    ANSEL = 0x00;     // all digital
-    CMCON = 0x07;     // comparators off
-    VRCON = 0x00;     // voltage ref off
-
-    // inputs RA0..RA3
-    TX_TRIS |= TX_MASK;
-    // IR drive RA5
-    IR_TX_TRIS = 0;
-    IR_TX_LAT  = 0;
+// Return only lower nibble of PORTA
+uint8_t readData(void) {
+    return (PORTA & 0x0F);
 }
 
-void send_frame(uint8_t data) {
-    uint8_t i;
+// Transmit: 1 ms “start”, four data bits (250 µs = 0, 500 µs = 1), then 500 µs “end”
+void sendBits(uint8_t beans) {
+    // Start pulse: 1 ms
+    EMITTER = 1;  
+    __delay_us(1000);
+    EMITTER = 0;  
+    __delay_us(250);
 
-    // 1) Start pulse
-    IR_TX_LAT = 1;
-    __delay_us(START_PULSE_US);
-    IR_TX_LAT = 0;
-    __delay_us(START_GAP_US);
-
-    // 2) 4 data bits, MSB first
-    for (i = 0; i < 4; i++) {
-        IR_TX_LAT = 1;
-        if (data & (1 << (3 - i))) {
-            __delay_us(BIT1_PULSE_US);
+    // Data bits, MSB → LSB
+    for (int i = 3; i >= 0; i--) {
+        EMITTER = 1;
+        if (beans & (1 << i)) {
+            __delay_us(500);   // bit = 1
         } else {
-            __delay_us(BIT0_PULSE_US);
+            __delay_us(250);   // bit = 0
         }
-        IR_TX_LAT = 0;
-        __delay_us(BIT_GAP_US);
+        EMITTER = 0;
+        __delay_us(250);      // inter-bit gap
     }
+
+    // End pulse: 500 µs
+    EMITTER = 1;  
+    __delay_us(1000);
+    EMITTER = 0;
 }
