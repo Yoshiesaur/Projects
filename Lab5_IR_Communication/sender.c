@@ -51,7 +51,7 @@ uint8_t readData(void) {
     return (PORTA & 0x0F);
 }
 
-// Transmit: 1 ms “start”, four data bits (250 µs = 0, 500 µs = 1), then 500 µs “end”
+// Transmit: 1 ms “start”, four data bits (250 µs = 0, 500 µs = 1), then  1 ms “end”
 void sendBits(uint8_t beans) {
     // Start pulse: 1 ms
     EMITTER = 1;  
