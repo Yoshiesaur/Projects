@@ -14,7 +14,6 @@ void sendBits(uint8_t);
 #pragma config PWRTE  = OFF       // Power-up Timer disabled
 #pragma config MCLRE  = OFF       // RA3/MCLR pin enabled as digital input
 #pragma config BOREN  = OFF       // Brown-out Reset disabled
-#pragma config LVP    = OFF       // Low-Voltage Programming disabled
 #pragma config CPD    = OFF       // Data EEPROM Code Protection disabled
 #pragma config CP     = OFF       // Flash Program Memory Code Protection disabled
 
