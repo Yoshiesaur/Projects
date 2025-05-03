@@ -112,6 +112,7 @@ void sendBits(uint8_t beans) {
         EMITTER = 0;
         __delay_us(250);      // inter-bit gap
          */   
+        
     // End pulse: 1 ms
     EMITTER = 1;  
     __delay_us(1000);
