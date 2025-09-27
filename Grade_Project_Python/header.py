@@ -54,10 +54,37 @@ class Dist_Grades:
         return "No matching entries found."
                 
 class Subject:
+    '''
+    This Subject class contains all the columns in a specified subject. Each Subject class is a course being taught.
     
+    get_grade()       -> Returns the average for the course      -> Returns a single precision number
+    re_adjust()         -> Re-evaluated the average for the course -> Does not return anything
+    add_column(name)    -> Adds a column (Dist_Grade)              -> Does not return anything
+    delete_column(name) -> Deletes a column (Dist_Grade)           -> Does not return anything
+    
+    '''
     # Constructor
     def __init__(self, in_name):
         self.sub_name = in_name
-        self.columns = None if not None else Dist_Grades
+        self.average = 0
+        self.columns = []
+        
+    def get_grade(self) -> float:
+        return self.average
+    
+    def re_adjust(self):
+        if not self.columns:
+            self.average = 0
+            return
+        
+        total = 0
+        for cols in self.columns:
+            total += cols.get_average() * cols.weight
+        self.average = total
+        
+    def add_column(self):
+        
+
+                
         
         
