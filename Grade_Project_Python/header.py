@@ -82,9 +82,10 @@ class Subject:
             total += cols.get_average() * cols.weight
         self.average = total
         
-    def add_column(self):
-        
-
-                
+    def add_column(self, inName, inWeight):
+        new_column = Dist_Grades(inName, inWeight)
+        self.columns.append(new_column)
+        self.re_adjust()
+          
         
         
